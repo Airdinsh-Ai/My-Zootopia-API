@@ -1,20 +1,4 @@
-import os
-
-import requests
-from dotenv import load_dotenv
-
-load_dotenv()
-API_KEY = os.getenv("API_KEY")
-
-
-def load_data_from_api(animal_name):
-    """Fetches animal data from the API Ninjas Animals API"""
-    response = requests.get(
-        "https://api.api-ninjas.com/v1/animals",
-        headers={"X-Api-Key": API_KEY},
-        params={"name": animal_name},
-    )
-    return response.json()
+import data_fetcher
 
 
 def read_template(file_path):
@@ -65,7 +49,7 @@ def get_skin_type(animal_obj):
 
 
 animal_name = input("Enter a name of an animal: ")
-animals_data = load_data_from_api(animal_name)
+animals_data = data_fetcher.fetch_data(animal_name)
 html_template = read_template("animals_template.html")
 
 animals_info = ""
