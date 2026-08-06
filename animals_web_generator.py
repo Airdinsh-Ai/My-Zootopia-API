@@ -64,26 +64,21 @@ def get_skin_type(animal_obj):
     return animal_obj["characteristics"].get("skin_type", "Unknown")
 
 
-animals_data = load_data_from_api("Fox")
+animal_name = input("Enter a name of an animal: ")
+animals_data = load_data_from_api(animal_name)
 html_template = read_template("animals_template.html")
-
-skin_types = sorted({get_skin_type(animal) for animal in animals_data})
-print("Available skin types:")
-for skin_type in skin_types:
-    print(f"- {skin_type}")
-
-chosen_skin_type = input("Enter a skin type to filter by: ")
-
-filtered_animals_data = [
-    animal for animal in animals_data if get_skin_type(animal) == chosen_skin_type
-]
 
 animals_info = ""
 
-for animal in filtered_animals_data:
-    animals_info += serialize_animal(animal)
+if animals_data:
+    for animal in animals_data:
+        animals_info += serialize_animal(animal)
+else:
+    animals_info = f'<h2>The Animal "{animal_name}" doesnt exist.</h2>'
 
 html_output = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_info)
 
 with open("animals.html", "w") as file:
     file.write(html_output)
+
+print("Website was successfully generated to the file animals.html.")
