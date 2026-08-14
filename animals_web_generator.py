@@ -3,7 +3,7 @@ import data_fetcher
 
 def read_template(file_path):
     """Reads the HTML template file and returns its content as string"""
-    with open(file_path, "r") as handle:
+    with open(file_path, "r", encoding="utf-8") as handle:
         return handle.read()
 
 
@@ -48,21 +48,26 @@ def get_skin_type(animal_obj):
     return animal_obj["characteristics"].get("skin_type", "Unknown")
 
 
-animal_name = input("Enter a name of an animal: ")
-animals_data = data_fetcher.fetch_data(animal_name)
-html_template = read_template("animals_template.html")
+def main():
+    animal_name = input("Enter a name of an animal: ")
+    animals_data = data_fetcher.fetch_data(animal_name)
+    html_template = read_template("animals_template.html")
 
-animals_info = ""
+    animals_info = ""
 
-if animals_data:
-    for animal in animals_data:
-        animals_info += serialize_animal(animal)
-else:
-    animals_info = f'<h2>The Animal "{animal_name}" doesnt exist.</h2>'
+    if animals_data:
+        for animal in animals_data:
+            animals_info += serialize_animal(animal)
+    else:
+        animals_info = f'<h2>The Animal "{animal_name}" doesnt exist.</h2>'
 
-html_output = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_info)
+    html_output = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_info)
 
-with open("animals.html", "w") as file:
-    file.write(html_output)
+    with open("animals.html", "w", encoding="utf-8") as file:
+        file.write(html_output)
 
-print("Website was successfully generated to the file animals.html.")
+    print("Website was successfully generated to the file animals.html.")
+
+
+if __name__ == "__main__":
+    main()
